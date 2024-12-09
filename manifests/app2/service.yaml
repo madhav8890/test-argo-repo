@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: my-app # The selector matches the pods with the label 'app: my-app'
+    app: app2 # The selector matches the pods with the label 'app: my-app'
   ports:
     - protocol: TCP
       port: 80 # Port exposed by the service
