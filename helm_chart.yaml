@@ -14,7 +14,6 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/part-of: all-helm-chart-applications
-      # Correcting the naming logic to ensure valid Kubernetes resource names
       name: "{{path.basename}}" # Set the name based on the directory (Helm chart name)
     spec:
       project: default # Specify the Argo CD project (you can change this if needed)
@@ -24,8 +23,7 @@ spec:
         path: "{{path}}" # Path to each Helm chart in the 'charts' folder
         helm:
           releaseName: "{{path.basename}}" # Helm release name based on the directory name
-          values: # Optional: Provide a default values file or customize values here
-            - values.yaml
+          values: "values.yaml" # Specify the path to the values file as a string
       destination:
         namespace: default # The namespace where the resources will be deployed
         server: https://kubernetes.default.svc
