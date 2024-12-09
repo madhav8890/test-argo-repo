@@ -6,24 +6,26 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: 'https://github.com/madhav8890/test-argo-repo.git'  # Replace with your Git repository URL
-        revision: main  # Specify the branch or commit to pull from
+        repoURL: "https://github.com/madhav8890/test-argo-repo.git" # Replace with your Git repository URL
+        revision: main # Specify the branch or commit to pull from
         directories:
-          - path: 'manifests/*'  # Path to the manifests directory in the Git repo (treats each directory as an application)
+          - path: "manifests/*" # Path to the manifests directory in the Git repo (treats each directory as an application)
   template:
     metadata:
       labels:
         app.kubernetes.io/part-of: all-manifests-applications
+      # Correcting the naming logic to ensure valid Kubernetes resource names
+      name: "{{path.basename}}"
     spec:
-      project: default  # Specify the Argo CD project (you can change this if needed)
+      project: default # Specify the Argo CD project (you can change this if needed)
       source:
-        repoURL: 'https://github.com/madhav8890/test-argo-repo.git'  # Same Git repository URL
-        targetRevision: main  # Same branch or commit
-        path: "{{path}}"  # Path for each directory in the 'manifests' folder
+        repoURL: "https://github.com/madhav8890/test-argo-repo.git" # Same Git repository URL
+        targetRevision: main # Same branch or commit
+        path: "{{path}}" # Path for each directory in the 'manifests' folder
       destination:
-        namespace: default  # The namespace where the resources will be deployed
+        namespace: default # The namespace where the resources will be deployed
         server: https://kubernetes.default.svc
       syncPolicy:
         automated:
-          prune: true  # Enable pruning of resources no longer in the Git repo
-          selfHeal: true  # Enable auto-healing of the applications if they go out of sync
+          prune: true # Enable pruning of resources no longer in the Git repo
+          selfHeal: true # Enable auto-healing of the applications if they go out of sync
