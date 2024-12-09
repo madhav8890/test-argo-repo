@@ -6,25 +6,25 @@ metadata:
 spec:
   generators:
     - git:
-        repoURL: 'https://github.com/madhav8890/test-argo-repo.git'
+        repoURL: "https://github.com/madhav8890/test-argo-repo.git"
         revision: HEAD
         directories:
           - path: charts/* # Matches all subdirectories under charts
   template:
     metadata:
-      name: '{{path.basename}}' # Use the directory name as the application name
+      name: "{{path.basename}}" # Use the directory name as the application name
     spec:
       project: default
       source:
-        repoURL: 'https://github.com/your-org/your-repo.git'
+        repoURL: "https://github.com/madhav8890/test-argo-repo.git" # Ensure this matches the generator's repoURL
         targetRevision: HEAD
-        path: '{{path}}' # Path to the specific chart directory
+        path: "{{path}}" # Path to the specific chart directory
         helm:
           valueFiles:
-            - '{{path}}/values.yaml' # Custom values file for each chart
+            - "{{path}}/values.yaml" # Custom values file for each chart
       destination:
-        server: 'https://kubernetes.default.svc'
-        namespace: '{{path.basename}}' # Deploy each application in its own namespace or adjust as needed
+        server: "https://kubernetes.default.svc"
+        namespace: "{{path.basename}}" # Optionally deploy each application in its own namespace based on the chart name
       syncPolicy:
         automated:
           prune: true
