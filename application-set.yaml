@@ -1,33 +1,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: all-applications
+  name: all-manifests-applications
   namespace: argocd
 spec:
   generators:
-  - git:
-      repoURL: https://github.com/example/my-repo.git # Replace with your repository URL
-      revision: main
-      directories:
-      - path: 'charts/*'      # Helm charts
-      - path: 'manifests/*'   # Kubernetes manifests
+    - git:
+        repoURL: 'https://github.com/madhav8890/test-argo-repo.git'  # Replace with your Git repository URL
+        revision: main  # Specify the branch or commit to pull from
+        directories:
+          - path: 'manifests/*'  # Path to the manifests directory in the Git repo (treats each directory as an application)
   template:
     metadata:
       labels:
-        app.kubernetes.io/part-of: all-applications
+        app.kubernetes.io/part-of: all-manifests-applications
     spec:
-      project: default
+      project: default  # Specify the Argo CD project (you can change this if needed)
       source:
-        repoURL: https://github.com/example/my-repo.git # Replace with your repository URL
-        targetRevision: main
-        path: "{{path}}" # Automatically detects the application path
-        helm:
-          valueFiles:
-            - values.yaml
+        repoURL: 'https://github.com/madhav8890/test-argo-repo.git'  # Same Git repository URL
+        targetRevision: main  # Same branch or commit
+        path: "{{path}}"  # Path for each directory in the 'manifests' folder
       destination:
-        namespace: default
+        namespace: default  # The namespace where the resources will be deployed
         server: https://kubernetes.default.svc
       syncPolicy:
         automated:
-          prune: true
-          selfHeal: true
+          prune: true  # Enable pruning of resources no longer in the Git repo
+          selfHeal: true  # Enable auto-healing of the applications if they go out of sync
