@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: all-applications
+  namespace: argocd
+spec:
+  generators:
+  - git:
+      repoURL: https://github.com/example/my-repo.git # Replace with your repository URL
+      revision: main
+      directories:
+      - path: 'charts/*'      # Helm charts
+      - path: 'manifests/*'   # Kubernetes manifests
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/part-of: all-applications
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/example/my-repo.git # Replace with your repository URL
+        targetRevision: main
+        path: "{{path}}" # Automatically detects the application path
+        helm:
+          valueFiles:
+            - values.yaml
+      destination:
+        namespace: default
+        server: https://kubernetes.default.svc
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
