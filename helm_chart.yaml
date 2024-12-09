@@ -1,33 +1,31 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: all-helm-chart-applications
+  name: my-applications
   namespace: argocd
 spec:
   generators:
     - git:
-        repoURL: "https://github.com/madhav8890/test-argo-repo.git" # Replace with your Git repository URL
-        revision: main # Specify the branch or commit to pull from
+        repoURL: 'https://github.com/madhav8890/test-argo-repo.git'
+        revision: HEAD
         directories:
-          - path: "charts/*" # Path to the Helm charts directory in the Git repo (treats each directory as an application)
+          - path: charts/* # Matches all subdirectories under charts
   template:
     metadata:
-      labels:
-        app.kubernetes.io/part-of: all-helm-chart-applications
-      name: "{{path.basename}}" # Set the name based on the directory (Helm chart name)
+      name: '{{path.basename}}' # Use the directory name as the application name
     spec:
-      project: default # Specify the Argo CD project (you can change this if needed)
+      project: default
       source:
-        repoURL: "https://github.com/madhav8890/test-argo-repo.git" # Same Git repository URL
-        targetRevision: main # Same branch or commit
-        path: "{{path}}" # Path to each Helm chart in the 'charts' folder
+        repoURL: 'https://github.com/your-org/your-repo.git'
+        targetRevision: HEAD
+        path: '{{path}}' # Path to the specific chart directory
         helm:
-          releaseName: "{{path.basename}}" # Helm release name based on the directory name
-          values: "values.yaml" # Specify the path to the values file as a string
+          valueFiles:
+            - '{{path}}/values.yaml' # Custom values file for each chart
       destination:
-        namespace: default # The namespace where the resources will be deployed
-        server: https://kubernetes.default.svc
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{path.basename}}' # Deploy each application in its own namespace or adjust as needed
       syncPolicy:
         automated:
-          prune: true # Enable pruning of resources no longer in the Git repo
-          selfHeal: true # Enable auto-healing of the applications if they go out of sync
+          prune: true
+          selfHeal: true
