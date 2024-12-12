@@ -1,7 +1,0 @@
-replicaCount: 2
-image:
-  repository: httpd
-  tag: latest
-service:
-  type: ClusterIP
-  port: 8080
