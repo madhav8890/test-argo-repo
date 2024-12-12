@@ -5,15 +5,20 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - git:
-        repoURL: "https://github.com/madhav8890/test-argo-repo.git"
-        revision: main
-        directories:
-          - path: charts/*
-
+    - matrix:
+        generators:
+          - git:
+              repoURL: "https://github.com/madhav8890/test-argo-repo.git"
+              revision: main
+              directories:
+                - path: charts/*
+          - list:
+              elements:
+                - namespace: dev
+                - namespace: prod
   template:
     metadata:
-      name: "{{path.basename}}"
+      name: "{{namespace}}-{{path.basename}}"
     spec:
       project: default
       source:
@@ -23,9 +28,10 @@ spec:
         helm:
           valueFiles:
             - values.yaml
+            - environments/{{namespace}}-values.yaml
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: "default"
+        namespace: "{{namespace}}"
       syncPolicy:
         automated:
           prune: true

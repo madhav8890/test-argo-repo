@@ -1,0 +1,7 @@
+replicaCount: 1
+image:
+  repository: httpd
+  tag: latest
+service:
+  type: NodePort
+  port: 8080
