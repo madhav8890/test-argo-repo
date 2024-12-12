@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: my-applications
-  namespace: argocd
+  namespace: testns
 spec:
   generators:
     - git:
@@ -24,7 +24,7 @@ spec:
             - values.yaml" # Custom values file for each chart
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: "{{path.basename}}" # Optionally deploy each application in its own namespace based on the chart name
+        namespace: "testns" # Optionally deploy each application in its own namespace based on the chart name
       syncPolicy:
         automated:
           prune: true

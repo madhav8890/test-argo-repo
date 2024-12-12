@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: all-manifests-applications
-  namespace: argocd
+  namespace: testns
 spec:
   generators:
     - git:
@@ -15,7 +15,7 @@ spec:
       labels:
         app.kubernetes.io/part-of: all-manifests-applications
       # Correcting the naming logic to ensure valid Kubernetes resource names
-      name: "{{path.basename}}"
+      name: "{{path.basename}}" # This will use the directory name for the app name
     spec:
       project: default # Specify the Argo CD project (you can change this if needed)
       source:
@@ -23,7 +23,9 @@ spec:
         targetRevision: main # Same branch or commit
         path: "{{path}}" # Path for each directory in the 'manifests' folder
       destination:
-        namespace: default # The namespace where the resources will be deployed
+        namespace: default # If you want all apps in the same namespace
+        # Or if you want to deploy each in its own namespace:
+        # namespace: "{{path.basename}}"
         server: https://kubernetes.default.svc
       syncPolicy:
         automated:

@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: mysql
+  repository: nginx
   tag: latest
 service:
   type: ClusterIP
