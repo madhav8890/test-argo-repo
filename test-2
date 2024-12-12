@@ -14,7 +14,7 @@ spec:
                 - path: charts/*
           - list:
               elements:
-                - namespace: dev
+                # - namespace: dev
                 - namespace: prod
   template:
     metadata:
@@ -27,11 +27,14 @@ spec:
         path: "{{path}}"
         helm:
           valueFiles:
-            - values.yaml
+            - "values.yaml"
+            - "values-{{namespace}}.yaml"
       destination:
         server: "https://kubernetes.default.svc"
         namespace: "{{namespace}}"
       syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
         automated:
           prune: true
           selfHeal: true

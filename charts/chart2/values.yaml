@@ -3,5 +3,5 @@ image:
   repository: httpd
   tag: latest
 service:
-  type: NodePort
+  type: ClusterIP
   port: 8080
