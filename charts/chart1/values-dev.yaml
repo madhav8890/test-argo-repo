@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: nginx
+  repository: httpd
   tag: latest
 service:
   type: NodePort
