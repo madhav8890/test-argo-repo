@@ -14,7 +14,7 @@ spec:
                 - path: charts/*
           - list:
               elements:
-                # - namespace: dev
+                - namespace: dev
                 - namespace: prod
   template:
     metadata:
