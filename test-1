@@ -10,12 +10,10 @@ spec:
         revision: main
         directories:
           - path: charts/*
-    - list:
-        elements:
-          - namespace: prod
+
   template:
     metadata:
-      name: "{{path.basename}}{{namespace}}"
+      name: "{{path.basename}}"
     spec:
       project: default
       source:
@@ -24,8 +22,7 @@ spec:
         path: "{{path}}"
         helm:
           valueFiles:
-            - values.yaml
-            - values-{{namespace}}.yaml
+            - *.yaml
       destination:
         server: "https://kubernetes.default.svc"
         namespace: default
