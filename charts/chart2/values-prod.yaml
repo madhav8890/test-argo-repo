@@ -1,7 +1,7 @@
 replicaCount: 2
 image:
-  repository: httpd
+  repository: nginx
   tag: latest
 service:
-  type: ClusterIP
+  type: NodePort
   port: 8080
