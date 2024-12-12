@@ -15,7 +15,7 @@ spec:
           - namespace: prod
   template:
     metadata:
-      name: "{{path.basename}}-{{.namespace}}"
+      name: "{{namespace}}"
     spec:
       project: default
       source:
